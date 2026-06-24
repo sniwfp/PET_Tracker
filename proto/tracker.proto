@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package tracker;
+
+option go_package = "./pb";
+
+service TrackerService {
+  rpc SyncHealthData (SyncHealthDataRequest) returns (SyncHealthDataResponse);
+}
+
+// Запрос на синхронизацию данных из Apple/Samsung Health
+message SyncHealthDataRequest {
+  string device_id = 1;        // Идентификатор устройства
+  string date = 2;             // Дата в формате YYYY-MM-DD
+  
+  SleepData sleep = 3;         // Данные о сне
+  ActivityData activity = 4;   // Данные об активности (спорт)
+}
+
+message SleepData {
+  float total_hours = 1;       // Общая продолжительность сна
+  string deep_sleep_min = 2;   // При желании можно расширять (глубокий сон)
+}
+
+message ActivityData {
+  int32 steps = 1;             // Шаги за день
+  int32 active_calories = 2;   // Сожженные калории
+  bool workout_done = 3;       // Был ли зафиксирован воркаут
+}
+
+message SyncHealthDataResponse {
+  bool success = 1;
+  string error_message = 2;
+}
